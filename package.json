@@ -4,7 +4,8 @@
   "description": "State-based programming paradigm tools for develompent automate event-based (reactive) system",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node index.js"
   },
   "keywords": [
     "paradigm",
