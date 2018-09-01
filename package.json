@@ -1,0 +1,22 @@
+{
+  "name": "idedafsm",
+  "version": "1.0.0",
+  "description": "State-based programming paradigm tools for develompent automate event-based (reactive) system",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "paradigm",
+    "fsm",
+    "automate",
+    "development"
+  ],
+  "author": "Yakov Liskoff",
+  "license": "ISC",
+  "dependencies": {
+    "dafsm": "git+https://github.com/vcomm/dafsm.git#dev",
+    "express": "^4.16.3",
+    "svg-builder": "^1.0.0"
+  }
+}

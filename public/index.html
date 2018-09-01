@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/app.css" rel="stylesheet" type="text/css">
+    <link href="css/jsoneditor.css" rel="stylesheet" type="text/css">
+    <script src="js/jsoneditor.js"></script>
+
+    <script src="https://bgrins.github.io/filereader.js/filereader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#open">Open: <input type="file" id="loadDocument" value="Load" style="width: 100px;"/></a>
+    <a href="#save">Save: <input type="button" id="saveDocument" value="Save"/></a>
+    <div class="dropdown">
+        <button class="dropbtn">Docs
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#" onclick="buildFsm(editor.get())">FSM</a>
+            <a href="#">ASM</a>
+            <a href="#">TXT</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Build
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#" onclick="buildCodeJS(editor.get(),'webjs','context')">Web</a>
+            <a href="#" onclick="buildCodeJS(editor.get(),'nodejs','context')">Node</a>
+            <a href="#">.....</a>
+        </div>
+    </div>
+</div>
+
+<h2>State-Based Programming Paradigm</h2>
+<p>Tools for design and coding automate event-based (reactive) systems.</p>
+
+<div class="row" style="height: 650px;">
+    <div class="column" style="background-color:rgba(230,230,230,0.49);">
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'INTRO')" id="defaultOpen">INTRO</button>
+            <button class="tablinks" onclick="openCity(event, 'FSM')" id="tabFSM">FSM</button>
+            <button class="tablinks" onclick="openCity(event, 'ASM')" id="tabASM">ASM</button>
+            <button class="tablinks" onclick="openCity(event, 'TXT')" id="tabTXT">TXT</button>
+            <button class="tablinks" onclick="openCity(event, 'CODE')" id="tabCODE">CODE</button>
+        </div>
+
+        <div id="INTRO" class="tabcontent">
+            <h2>Dynamic attachment state-based programming paradigm</h2>
+            <p>The feature of this approach is that automata, used for developing, are defined with the help of transition graphs. For distinguishing of the nodes of these graphs the term “state coding” is to be introduced. When using “multiple state coding” with the help of single variable it is possible to distinguish amount of states which is equal to the amount of variables values. This allows to introduce in programming the term “program observability”. Using the offered approach, programming is to be performed using the concept of “state”, not the concept of “flag variables”. It allows to understand and specify the task and its parts (subtasks) better.</p>
+            <p>Henceforth automata approach was spread to the event-based (reactive) systems. In systems of this kind all limitations, mentioned above are taken away. It is obvious from the name of these systems that events are used among the input actions. Role of output actions could be played by arbitrary functions. Any real-time operating system could be used as an environment.</p>
+            <p>For programming for event-based systems with the help of automata a procedural approach to software developing was used. So this king of programming was called as “state-based programming”.</p>
+            <p>Using this method output actions are assigned to the arcs, loops or nodes of the transition graphs (mixed automata are to be used – Moore-Mealy automata). This allows to present sequences of actions, which are reactions to the corresponding input actions, in the compact form.</p>
+            <p>On of the features of programming for the reactive systems is that liquidation of logic in the event handlers and forming of system of interacting automata, which are called from these handlers, causes logic centralization. Automata in such system can interact by nesting, by calling ability and with the help of state numbers interchange. Last type of interaction is described in work, which declares that “this type of interaction may be used as powerful tool for program verification”.</p>
+            <p>System of interconnected automata forms system-independent part of software. At the same time system-dependent part is formed by functions of input and output actions, event handlers and so on. Another important feature of this approach is that automata in it are used thrice: for specification, for implementation (they stay in the source code) and for drawing up the protocol, which is performed, as said above, in terms of automata. Last property allows to verify the propriety of automata system functioning. Logging is performed automatically, it is based on the created program. This mechanism could be also used for large scale tasks and for task with difficult, smeared software logic.</p>
+            <p>The composite approach may be rather useful for solving task from a very large spectrum, it is based on object-oriented and automata-based programming paradigms. In work this method was called as “state-based object-oriented programming”.</p>
+        </div>
+
+        <div id="FSM" class="tabcontent">
+            <!--<span onclick="this.parentElement.style.display='none'" class="topright">&times</span>-->
+            <h2>Finite State Machine (FSM)</h2>
+            <p>A Finite State Machine (FSM) is the representation of a system in terms of its states and events. A state is simply a decision point at the system level , and an event is a stimulus that causes a state transition within the system. Therefore , a state machine stays in the current state until n event is received causing a state transition. If the state to transition to is the current state, a new state is not entered event though a state transition occurs.</p>
+            <h3>Mealy and Moore</h3>
+            <p>Two well known types of state machine are the Mealy and Moore machines. The difference between these state machines is their output. The output of the Mealy state machine depends on the received event, while the output of the Moore state machine does not.</p>
+            <p> The functions defining the Moore state machine at transition t are: <b>S(t+1) = Function (S(t),I(t)); O(t+1) = Function (S(t))</b> </p>
+            <p>The functions defining the Mealy state machine at transition t are: <b>S(t+1) = Function (S(t),I(t)); O(t+1) = Function (S(t),I(t))</b> </p>
+            <p>While the state transition function S is same for both states machine, the output function O is different. The output of the Moore machine depends solely on the current state, while the output of the Mealy machine depends on both the current state and input.</p>
+            <h3>Deterministic and Non- Deterministic.</h3>
+            <p>In a state transition diagram, if no two outgoing edges of a state have the same label, then the corresponding machine is called a deterministic finite state machine …if two or more outgoing edges of a state have the same label, then it is called a non-deterministic finite state machine.</p>
+            <h3>State Diagram Notation (Graph)</h3>
+            <p>State diagrams (also called State Chart diagrams) are used to help the developer better understand any complex/unusual functionalities or business flows of specialized areas of the system. In short, State diagrams depict the dynamic behavior of the entire system, or a sub-system, or even a single object in a system. This is done with the help of Behavioral elements.</p>
+        </div>
+
+        <div id="ASM" class="tabcontent">
+            <!--<span onclick="this.parentElement.style.display='none'" class="topright">&times</span>-->
+            <h3>Algorithmic State Machine Notation (Block-Scheme)</h3>
+            <p>You have already seen how to describe finite state machines in terms of state diagrams and tables. However, it can be difficult to describe complex finite state machines in this way. Recently, hardware designers have shifted toward using alternative representations of FSM behavior that look more like software descriptions. In this section, we introduce algorithmic state machine (ASM) notation. ASMs are similar to program flowcharts, but they have a more rigorous concept of timing.</p>
+            <p>You may wonder what is wrong with state diagrams. The problem is that they do not adequately capture the notion of an algorithm-a well-defined sequence of steps that produce a desired sequence of actions based on input data. State diagrams are weak at capturing the structure behind complex sequencing. The representations discussed next do a better job of making this sequencing structure explicit.</p>
+        </div>
+
+        <div id="TXT" class="tabcontent">
+            <!--<span onclick="this.parentElement.style.display='none'" class="topright">&times</span>-->
+            <h3>Analytical Notation (Text)</h3>
+            <p>S0 [W0] = { S1(X01/Y01)[V0] }</p>
+            <p>S1 [W1] = { S0(X10/Y10)[V0], S2(X12/Y12)[V2], S3(X13/Y13)[V3] }</p>
+            <p>S2 [W2] = { S0(X20/Y20)[V0], S4(X24/Y24)[V4] }</p>
+            <p>S3 [W3] = { S2(X32/Y32)[V2], S3(X33/Y33)[V3] }</p>
+            <p>S4 [W4] = { S0(X40/Y40)[V0], S3(X43/Y43)[V3] }</p>
+            <p>There are several action types: </p>
+            <p><i>Entry action - V which is performed when entering the state</i></p>
+            <p><i>Exit action - W which is performed when exiting the state</i></p>
+            <p><i>Input action - X which is performed depending on present state and input conditions</i></p>
+            <p><i>Transition action - Y which is performed when performing a certain transition</i></p>
+        </div>
+
+        <div id="CODE" class="tabcontent">
+            <!--<span onclick="this.parentElement.style.display='none'" class="topright">&times</span>-->
+            <h3>CODE</h3>
+            <pre id="editorcode" style="height: 520px;"></pre>
+        </div>
+    </div>
+    <div class="column" style="background-color:rgba(194,226,250,0.27);">
+        <div id="jsoneditor" style="height: 650px;"></div>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
