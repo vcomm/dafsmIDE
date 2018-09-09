@@ -18,6 +18,6 @@
   "dependencies": {
     "dafsm": "git+https://github.com/vcomm/dafsm.git#dev",
     "express": "^4.16.3",
-    "svg-builder": "^1.0.0"
+    "buildSVG": "git+https://github.com/vcomm/buildSVG.git"
   }
 }

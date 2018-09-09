@@ -64,14 +64,33 @@ function buildCodeJS(json,type,lname) {
             data: json})
     })
         .then(res => res.text())
-        .then(code => {
-            editcode.set(code);
+        .then(source => {
+            //editcode.set(code);
+            var code = document.getElementById("editorcode")
+               ,parent = code.parentElement
+                parent.removeChild(code)
+                code = document.createElement("pre")
+                code.id = "editorcode"
+                code.className = "brush: js"
+                parent.appendChild(code)
+                code.textContent = source
+
+            SyntaxHighlighter.highlight()
         })
         .catch(console.error.bind(console));
 }
 
 
 window.addEventListener('load', function () {
+    // Resize by document.documentElement.clientHeight
+/*
+    var i
+      , column = document.querySelectorAll(".tabcontent")
+      , clHeight = document.documentElement.clientHeight;
+    for (i = 0; i < column.length; i++) {
+         column[i].style.height = clHeight;
+    }
+*/
     // Load a JSON document
     FileReaderJS.setupInput(document.getElementById('loadDocument'), {
         readAsDefault: 'Text',
@@ -115,6 +134,77 @@ window.addEventListener('load', function () {
         },
         onModeChange: function (newMode, oldMode) {
             console.log('Mode switched from', oldMode, 'to', newMode);
+        }
+    };
+
+    var schema = {
+        "description": "Dynamic attachment finite state machine schema",
+        "type": "object",
+        "required": ["id","type","project","start","stop"],
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "type": {
+                "type": "string"
+            },
+            "project": {
+                "type": "string"
+            },
+            "start": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "pattern": "^func_*"
+                    }
+                }
+            },
+            "stop": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "pattern": "^func_*"
+                    }
+                }
+            },
+            "states": {
+                "type": "object",
+                "required": ["init","final"],
+                "properties": {
+                    "init": {
+                        "type": "object",
+                        "required": ["name","transitions"],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "exits": {
+                                "type": "array"
+                            },
+                            "transitions": {
+                                "type": "array"
+                            }
+                        }
+                    },
+                    "final": {
+                        "type": "object",
+                        "required": ["name"],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "entries": {
+                                "type": "array"
+                            }
+                        }
+                    }
+
+                }
+            }
         }
     };
 
@@ -189,7 +279,7 @@ window.addEventListener('load', function () {
                 ],
                 "stays": [
                     {
-                        "name": null,
+                        "name": "fn_readyStay",
                         "func": null
                     }
                 ],
@@ -241,7 +331,7 @@ window.addEventListener('load', function () {
                 ],
                 "stays": [
                     {
-                        "name": null,
+                        "name": "fn_connectStay",
                         "func": null
                     }
                 ],
@@ -295,17 +385,7 @@ window.addEventListener('load', function () {
 
     editor = new JSONEditor(container, options, json);
 
-    // Code Editor
-
-    editcode = new JSONEditor(document.getElementById('editorcode'), {
-            mode: 'code',
-            modes: ['code', 'text'], // allowed modes
-            onError: function (err) {
-                alert(err.toString());
-            },
-            onModeChange: function (newMode, oldMode) {
-                console.log('Mode switched from', oldMode, 'to', newMode);
-            }});
-    //editcode.set({});
+    // Code Syntax Highlight
+    //SyntaxHighlighter.all();
 
 }, false);

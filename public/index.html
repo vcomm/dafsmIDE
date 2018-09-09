@@ -9,9 +9,44 @@
 
     <script src="https://bgrins.github.io/filereader.js/filereader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
+
+    <script src='js/shCore.js' type='text/javascript'></script>
+    <script src='js/shBrushJScript.js' type='text/javascript'></script>
+
+    <link href='css/shCore.css' rel='stylesheet' type='text/css'>
+    <link href='css/shThemeDefault.css' rel='stylesheet' type='text/css'>
+
+    <script>
+    function stateSelect(elem) {
+        elem.style.stroke = '#ffc700'
+
+    }
+    function trans2Goto(elem) {
+        let lst = elem.getAttribute('listgo')
+        let tooltip = document.getElementById("tooltip");
+        tooltip.innerHTML = lst;
+        tooltip.style.display = "block";
+        tooltip.style.left = evt.pageX + 10 + 'px';
+        tooltip.style.top = evt.pageY + 10 + 'px';
+    }
+
+    function showTooltip(evt, text) {
+        if(text === '') return;
+        let tooltip = document.getElementById("tooltip");
+        tooltip.innerHTML = text;
+        tooltip.style.display = "block";
+        tooltip.style.left = evt.pageX + 10 + 'px';
+        tooltip.style.top = evt.pageY + 10 + 'px';
+    }
+
+    function hideTooltip() {
+        var tooltip = document.getElementById("tooltip");
+        tooltip.style.display = "none";
+    }
+    </script>
 </head>
 <body>
-
+<div id="tooltip" display="none" style="position: absolute; display: none;"></div>
 <div class="navbar">
     <a href="#open">Open: <input type="file" id="loadDocument" value="Load" style="width: 100px;"/></a>
     <a href="#save">Save: <input type="button" id="saveDocument" value="Save"/></a>
@@ -37,10 +72,10 @@
     </div>
 </div>
 
-<h2>State-Based Programming Paradigm</h2>
-<p>Tools for design and coding automate event-based (reactive) systems.</p>
+<h2 class="paradigm"><i>Automata Event-Based (reactive) Programming Tools</i></h2>
+<!--<p>Tools for design and coding automate event-based (reactive) systems.</p>-->
 
-<div class="row" style="height: 650px;">
+<div class="row">
     <div class="column" style="background-color:rgba(230,230,230,0.49);">
         <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'INTRO')" id="defaultOpen">INTRO</button>
@@ -101,15 +136,28 @@
         <div id="CODE" class="tabcontent">
             <!--<span onclick="this.parentElement.style.display='none'" class="topright">&times</span>-->
             <h3>CODE</h3>
-            <pre id="editorcode" style="height: 520px;"></pre>
+            <pre id="editorcode" class="brush: js">
+
+            </pre>
         </div>
     </div>
     <div class="column" style="background-color:rgba(194,226,250,0.27);">
-        <div id="jsoneditor" style="height: 650px;"></div>
+        <div id="jsoneditor"></div>
     </div>
 </div>
 
 <script src="js/app.js"></script>
 
+<script type="text/javascript">
+
+    var code = document.getElementById("editorcode")
+    code.textContent = 'function foo()\n' +
+        '{\n' +
+        '   var temp = "name";\n' +
+        '   return temp;\n' +
+        '}'
+
+    SyntaxHighlighter.all()
+</script>
 </body>
 </html>

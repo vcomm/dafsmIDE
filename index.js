@@ -17,6 +17,13 @@ app.use(express.static(__dirname + '/public'));
 // Provide access to node_modules folder
 app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
+// Provide dynamic load clients logic
+app.get('/blogic', function(req, res) {
+    var lname = req.query.lname ? req.query.lname : 'client'
+    console.log('Request Logic: ',lname)
+    res.json(require('./logic/'+lname+'.json'))
+})
+
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 let operation = {
