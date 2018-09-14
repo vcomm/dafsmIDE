@@ -21,10 +21,12 @@
         elem.style.stroke = '#ffc700'
 
     }
-    function trans2Goto(evt, elem) {
+    function trans2Goto(elem) {
+        let st = elem.getAttribute('master')
+        let nst = elem.getAttribute('goto')
         let lst = elem.getAttribute('listgo')
         let tooltip = document.getElementById("tooltip");
-        tooltip.innerHTML = lst;
+        tooltip.innerHTML = '<b>' + st + ' >> ' + nst +'</b><br>'+ lst;
         tooltip.style.display = "block";
         tooltip.style.left = evt.pageX + 10 + 'px';
         tooltip.style.top = evt.pageY + 10 + 'px';
