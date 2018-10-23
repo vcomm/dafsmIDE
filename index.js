@@ -6,6 +6,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const chartFSM = require('dafsm').fsmChart;
 const jsCode = require('dafsm').jsPatern
+const es6Code = require('dafsm').es6Patern
+const swiftCode = require('dafsm').swiftPatern
+const javaCode = require('dafsm').javaPatern
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,14 +37,54 @@ let operation = {
     jscode: function (res,data,type,libname) {
         res.setHeader('Content-Type', 'application/javascript'/*'text/plain'*/)
         return jsCode.code(data,type,libname)
+    },
+    es6code: function (res,data,type,libname) {
+        //let sdk = asyncCall(`${__dirname}/node_modules/dafsm/lib/cdafsm.js`)
+        let bside = (type === 'es6') ? true : false
+        res.setHeader('Content-Type', 'application/javascript')
+        return es6Code.code(data,bside,libname)
+    },
+    swiftcode: function (res,data,type,libname) {
+        let bside = (type === 'swift') ? true : false
+        res.setHeader('Content-Type', 'application/javascript')
+        return swiftCode.code(data,bside,libname)
+    },
+    javacode: function (res,data,type,libname) {
+        let bside = (type === 'java') ? true : false
+        res.setHeader('Content-Type', 'application/javascript')
+        return javaCode.code(data,bside,libname)
     }
 }
 
 app.post('/data', function(req, res) {
-//    console.log("recv msg :",req.body);
+    console.log("recv msg :",req.body);
 //    res.setHeader('Content-Type', 'image/svg+xml');
     res.status('200').send(
         operation[req.body.oper](res,req.body.data,
                                  req.body.target.width,
                                  req.body.target.height));
 })
+
+/*
+function readFile(file) {
+    const fs = require('fs');
+    return new Promise((resolve,reject) => {
+        fs.readFile(file, 'utf8',
+            function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+    })
+}
+
+async function asyncCall(file) {
+    var result =  await readFile(file)
+//    console.log(result)
+    return result
+}
+*/
+//asyncCall(`${__dirname}/node_modules/dafsm/lib/cdafsm.js`)
+

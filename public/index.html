@@ -21,7 +21,7 @@
         elem.style.stroke = '#ffc700'
 
     }
-    function trans2Goto(evt, elem) {
+    function trans2Goto(elem) {
         let st = elem.getAttribute('master')
         let nst = elem.getAttribute('goto')
         let lst = elem.getAttribute('listgo')
@@ -67,8 +67,12 @@
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-            <a href="#" onclick="buildCodeJS(editor.get(),'webjs','context')">Web</a>
+            <a href="#" onclick="buildCodeJS(editor.get(),'webjs','context')">Vanila</a>
             <a href="#" onclick="buildCodeJS(editor.get(),'nodejs','context')">Node</a>
+            <a href="#" onclick="buildCodeES6(editor.get(),'es6','context')">ES6</a>
+            <a href="#" onclick="buildCodeSwift(editor.get(),'swift','context')">iOS</a>
+            <a href="#" onclick="buildCodeJava(editor.get(),'java','context')">Android</a>
+            <a href="#" onclick="buildCodeTS(editor.get(),'ts','context')">Angular</a>
             <a href="#">.....</a>
         </div>
     </div>

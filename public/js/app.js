@@ -79,6 +79,96 @@ function buildCodeJS(json,type,lname) {
         })
         .catch(console.error.bind(console));
 }
+function buildCodeES6(json,type,lname) {
+    document.getElementById("tabCODE").click();
+    fetch('/data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({oper: 'es6code',
+            target: {
+                width: type,
+                height: lname
+            },
+            data: json})
+    })
+        .then(res => res.text())
+        .then(source => {
+            //editcode.set(code);
+            var code = document.getElementById("editorcode")
+                ,parent = code.parentElement
+            parent.removeChild(code)
+            code = document.createElement("pre")
+            code.id = "editorcode"
+            code.className = "brush: js"
+            parent.appendChild(code)
+            code.textContent = source
+
+            SyntaxHighlighter.highlight()
+        })
+        .catch(console.error.bind(console));
+}
+function buildCodeSwift(json,type,lname) {
+    document.getElementById("tabCODE").click();
+    fetch('/data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({oper: 'swiftcode',
+            target: {
+                width: type,
+                height: lname
+            },
+            data: json})
+    })
+        .then(res => res.text())
+        .then(source => {
+            //editcode.set(code);
+            var code = document.getElementById("editorcode")
+                ,parent = code.parentElement
+            parent.removeChild(code)
+            code = document.createElement("pre")
+            code.id = "editorcode"
+            code.className = "brush: js"
+            parent.appendChild(code)
+            code.textContent = source
+
+            SyntaxHighlighter.highlight()
+        })
+        .catch(console.error.bind(console));
+}
+function buildCodeJava(json,type,lname) {
+    document.getElementById("tabCODE").click();
+    fetch('/data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({oper: 'javacode',
+            target: {
+                width: type,
+                height: lname
+            },
+            data: json})
+    })
+        .then(res => res.text())
+        .then(source => {
+            //editcode.set(code);
+            var code = document.getElementById("editorcode")
+                ,parent = code.parentElement
+            parent.removeChild(code)
+            code = document.createElement("pre")
+            code.id = "editorcode"
+            code.className = "brush: js"
+            parent.appendChild(code)
+            code.textContent = source
+
+            SyntaxHighlighter.highlight()
+        })
+        .catch(console.error.bind(console));
+}
 
 
 window.addEventListener('load', function () {
@@ -213,14 +303,11 @@ window.addEventListener('load', function () {
         "type": "FSM",
         "prj": "tb_",
         "complete": false,
-        "context": null,
         "start": {
-            "name": "fn_initialize",
-            "func": null
+            "name": "fn_initialize"
         },
         "stop": {
-            "name": "fn_finishing",
-            "func": null
+            "name": "fn_finishing"
         },
         "countstates": 4,
         "states": {
@@ -229,34 +316,28 @@ window.addEventListener('load', function () {
                 "name": "InitialState",
                 "transitions": [
                     {
-                        "nextstate": null,
                         "nextstatename": "final",
                         "triggers": [
                             {
-                                "name": "ev_outOfService",
-                                "func": null
+                                "name": "ev_outOfService"
                             }
                         ],
                         "effects": [
                             {
-                                "name": "fn_outOfServiceMsg",
-                                "func": null
+                                "name": "fn_outOfServiceMsg"
                             }
                         ]
                     },
                     {
-                        "nextstate": null,
                         "nextstatename": "ready",
                         "triggers": [
                             {
-                                "name": "ev_checkEnvComplete",
-                                "func": null
+                                "name": "ev_checkEnvComplete"
                             }
                         ],
                         "effects": [
                             {
-                                "name": "fn_signIn",
-                                "func": null
+                                "name": "fn_signIn"
                             }
                         ]
                     }
@@ -267,36 +348,30 @@ window.addEventListener('load', function () {
                 "name": "readyState",
                 "entries": [
                     {
-                        "name": "fn_updateActiveMembersList",
-                        "func": null
+                        "name": "fn_updateActiveMembersList"
                     }
                 ],
                 "exits": [
                     {
-                        "name": "fn_startPacketStatistics",
-                        "func": null
+                        "name": "fn_startPacketStatistics"
                     }
                 ],
                 "stays": [
                     {
-                        "name": "fn_readyStay",
-                        "func": null
+                        "name": "fn_readyStay"
                     }
                 ],
                 "transitions": [
                     {
-                        "nextstate": null,
                         "nextstatename": "connect",
                         "triggers": [
                             {
-                                "name": "ev_inviteCall_acceptCall",
-                                "func": null
+                                "name": "ev_inviteCall_acceptCall"
                             }
                         ],
                         "effects": [
                             {
-                                "name": "fn_reqCreateSession_reqTokenSession",
-                                "func": null
+                                "name": "fn_reqCreateSession_reqTokenSession"
                             }
                         ]
                     }
@@ -307,64 +382,52 @@ window.addEventListener('load', function () {
                 "name": "connectState",
                 "entries": [
                     {
-                        "name": "fn_initSession",
-                        "func": null
+                        "name": "fn_initSession"
                     },
                     {
-                        "name": "fn_publishStreams",
-                        "func": null
+                        "name": "fn_publishStreams"
                     },
                     {
-                        "name": "fn_showVideos",
-                        "func": null
+                        "name": "fn_showVideos"
                     }
                 ],
                 "exits": [
                     {
-                        "name": "fn_stopPacketStatistics",
-                        "func": null
+                        "name": "fn_stopPacketStatistics"
                     },
                     {
-                        "name": "fn_storeStatistics",
-                        "func": null
+                        "name": "fn_storeStatistics"
                     }
                 ],
                 "stays": [
                     {
-                        "name": "fn_connectStay",
-                        "func": null
+                        "name": "fn_connectStay"
                     }
                 ],
                 "transitions": [
                     {
-                        "nextstate": null,
                         "nextstatename": "final",
                         "triggers": [
                             {
-                                "name": "ev_networkProblem",
-                                "func": null
+                                "name": "ev_networkProblem"
                             }
                         ],
                         "effects": [
                             {
-                                "name": "fn_reportProblem",
-                                "func": null
+                                "name": "fn_reportProblem"
                             }
                         ]
                     },
                     {
-                        "nextstate": null,
                         "nextstatename": "ready",
                         "triggers": [
                             {
-                                "name": "ev_hangUp",
-                                "func": null
+                                "name": "ev_hangUp"
                             }
                         ],
                         "effects": [
                             {
-                                "name": "fn_disconnectSession",
-                                "func": null
+                                "name": "fn_disconnectSession"
                             }
                         ]
                     }
@@ -375,8 +438,7 @@ window.addEventListener('load', function () {
                 "name": "FinalState",
                 "entries": [
                     {
-                        "name": "fn_finallyReport",
-                        "func": null
+                        "name": "fn_finallyReport"
                     }
                 ]
             }
