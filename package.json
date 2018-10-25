@@ -1,6 +1,6 @@
 {
   "name": "idedafsm",
-  "version": "1.0.0",
+  "version": "1.6.0",
   "description": "State-based programming paradigm tools for develompent automate event-based (reactive) system",
   "main": "index.js",
   "scripts": {

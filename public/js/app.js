@@ -298,7 +298,7 @@ window.addEventListener('load', function () {
         }
     };
 
-    var json = {
+    var jsonO = {
         "id": "client",
         "type": "FSM",
         "prj": "tb_",
@@ -445,7 +445,154 @@ window.addEventListener('load', function () {
         }
     };
 
-    editor = new JSONEditor(container, options, json);
+    var jsonA = {
+        "id": "client",
+        "type": "FSM",
+        "prj": "tb_",
+        "complete": false,
+        "start": {
+            "name": "fn_initialize"
+        },
+        "stop": {
+            "name": "fn_finishing"
+        },
+        "countstates": 4,
+        "states": [
+            {
+                "key": "init",
+                "name": "InitialState",
+                "transitions": [
+                    {
+                        "nextstatename": "final",
+                        "triggers": [
+                            {
+                                "name": "ev_outOfService"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "name": "fn_outOfServiceMsg"
+                            }
+                        ]
+                    },
+                    {
+                        "nextstatename": "ready",
+                        "triggers": [
+                            {
+                                "name": "ev_checkEnvComplete"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "name": "fn_signIn"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "ready",
+                "name": "readyState",
+                "entries": [
+                    {
+                        "name": "fn_updateActiveMembersList"
+                    }
+                ],
+                "exits": [
+                    {
+                        "name": "fn_startPacketStatistics"
+                    }
+                ],
+                "stays": [
+                    {
+                        "name": "fn_readyStay"
+                    }
+                ],
+                "transitions": [
+                    {
+                        "nextstatename": "connect",
+                        "triggers": [
+                            {
+                                "name": "ev_inviteCall_acceptCall"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "name": "fn_reqCreateSession_reqTokenSession"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "connect",
+                "name": "connectState",
+                "entries": [
+                    {
+                        "name": "fn_initSession"
+                    },
+                    {
+                        "name": "fn_publishStreams"
+                    },
+                    {
+                        "name": "fn_showVideos"
+                    }
+                ],
+                "exits": [
+                    {
+                        "name": "fn_stopPacketStatistics"
+                    },
+                    {
+                        "name": "fn_storeStatistics"
+                    }
+                ],
+                "stays": [
+                    {
+                        "name": "fn_connectStay"
+                    }
+                ],
+                "transitions": [
+                    {
+                        "nextstatename": "final",
+                        "triggers": [
+                            {
+                                "name": "ev_networkProblem"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "name": "fn_reportProblem"
+                            }
+                        ]
+                    },
+                    {
+                        "nextstatename": "ready",
+                        "triggers": [
+                            {
+                                "name": "ev_hangUp"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "name": "fn_disconnectSession"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "final",
+                "name": "FinalState",
+                "entries": [
+                    {
+                        "name": "fn_finallyReport"
+                    }
+                ]
+            }
+        ]
+    };
+
+    editor = new JSONEditor(container, options, jsonA);
 
     // Code Syntax Highlight
     //SyntaxHighlighter.all();
