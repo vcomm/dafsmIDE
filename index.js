@@ -2,13 +2,13 @@
 
 const PORT = process.env.PORT || 3000
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const chartFSM = require('dafsm').fsmChart;
-const jsCode = require('dafsm').jsPatern
-const es6Code = require('dafsm').es6Patern
-const swiftCode = require('dafsm').swiftPatern
-const javaCode = require('dafsm').javaPatern
+const express = require('express')
+const bodyParser = require('body-parser')
+const chartFSM = require('./cli/primitives/fsm')
+const jsCode = require('./cli/paterns/javascript')
+const es6Code = require('./cli/paterns/es6')
+const swiftCode = require('./cli/paterns/swift')
+const javaCode = require('./cli/paterns/java')
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));

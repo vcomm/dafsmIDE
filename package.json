@@ -15,8 +15,8 @@
   "author": "Yakov Liskoff",
   "license": "ISC",
   "dependencies": {
-    "dafsm": "git+https://github.com/vcomm/dafsm.git#dev",
+    "dafsm": "git+https://github.com/vcomm/dafsm.git",
     "express": "^4.16.3",
-    "svg-builder": "^1.0.0"
+    "svg-builder": "git+https://github.com/vcomm/buildSVG.git"
   }
 }
