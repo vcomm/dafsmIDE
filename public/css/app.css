@@ -2,6 +2,22 @@
     box-sizing: border-box;
 }
 
+html{
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    margin: 0; 
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.container-fluid {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+}
+
 .paradigm {
     position: absolute;
     right: 200px;
@@ -17,12 +33,12 @@
     height: 80%;
 }
 
-/* Clear floats after the columns */
+/* Clear floats after the columns 
 .row:after {
     content: "";
     display: table;
     clear: both;
-}
+}*/
 
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
@@ -68,10 +84,9 @@ body {font-family: Arial;}
 .tabcontent {
     display: none;
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;
     border-top: none;
-    height: 80%;
-    background-color: white;
+    background-color: white;*/
 }
 
 /* Style the close button */
@@ -93,7 +108,7 @@ body {font-family: Arial;}
 .navbar a {
     float: left;
     font-size: 16px;
-    color: white;
+    color: rgb(77, 77, 77);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -151,4 +166,77 @@ body {font-family: Arial;}
     border-radius: 5px;
     padding: 5px;
     z-index: 100;
+}
+
+  /*********************************************************************************/
+  /* Navigation                                                                    */
+  /*********************************************************************************/
+.navigation {
+    cursor: pointer;
+    display: inline-block;    
+    position: absolute;
+    right: 40px;	
+}
+
+.bar1, .bar2, .bar3 {
+    top: 10px;
+    width: 35px;
+    height: 5px;
+    background-color: rgb(0, 0, 0);
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0px;
+    position: fixed;
+    z-index: 9999;    
+    top: 80px;
+    right: 8px;
+    background-color: #39454b;
+    color: #BDBDBD;
+    overflow-x: hidden;
+    transition: 0.8s;
+    padding-top: 100px;
+    font-family:Verdana;
+    opacity: 0.9;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
 }

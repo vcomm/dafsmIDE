@@ -3,12 +3,14 @@
 const PORT = process.env.PORT || 3000
 
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const chartFSM = require('./cli/primitives/fsm')
 const jsCode = require('./cli/paterns/javascript')
 const es6Code = require('./cli/paterns/es6')
 const swiftCode = require('./cli/paterns/swift')
 const javaCode = require('./cli/paterns/java')
+const pythonCode = require('./cli/paterns/python')
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,6 +21,9 @@ app.use(express.static(__dirname + '/public'));
 
 // Provide access to node_modules folder
 app.use('/scripts', express.static(`${__dirname}/node_modules/`));
+
+// Access to new UX IDE
+app.get('/ide', (req,res) => res.sendFile(path.join(__dirname+'/public/ide.html')))
 
 // Provide dynamic load clients logic
 app.get('/blogic', function(req, res) {
@@ -53,6 +58,11 @@ let operation = {
         let bside = (type === 'java') ? true : false
         res.setHeader('Content-Type', 'application/javascript')
         return javaCode.code(data,bside,libname)
+    },
+    pythoncode: function (res,data,type,libname) {
+        let bside = (type === 'py') ? true : false
+        res.setHeader('Content-Type', 'application/javascript')
+        return pythonCode.code(data,bside,libname)
     }
 }
 

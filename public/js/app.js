@@ -14,6 +14,45 @@ function openCity(evt, cityName) {
     evt.currentTarget.className += " active";
 }
 
+function openNav(x) {
+    x.classList.toggle("change");
+    let nav  = document.getElementById("mySidenav");
+    console.log(nav.style.width);
+    if ( nav.style.width == "0px")
+         nav.style.width = "300px";	
+    else	  
+         nav.style.width = "0px";	
+}
+
+function stateSelect(elem) {
+    elem.style.stroke = '#ffc700'
+
+}
+function trans2Goto(elem,evt) {
+    let st = elem.getAttribute('master')
+    let nst = elem.getAttribute('goto')
+    let lst = elem.getAttribute('listgo')
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = '<b>' + st + ' >> ' + nst +'</b><br>'+ lst;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX - 120 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+}
+
+function showTooltip(evt, text) {
+    if(text === '') return;
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX - 120 + 'px';
+    tooltip.style.top = evt.pageY + 10 + 'px';
+}
+
+function hideTooltip() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+}
+
 function reqData(param) {
     fetch(param.url + param.route, {
         method: param.method,
@@ -169,18 +208,58 @@ function buildCodeJava(json,type,lname) {
         })
         .catch(console.error.bind(console));
 }
+function buildCodePython(json,type,lname) {
+    document.getElementById("tabCODE").click();
+    fetch('/data', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({oper: 'pythoncode',
+            target: {
+                width: type,
+                height: lname
+            },
+            data: json})
+    })
+        .then(res => res.text())
+        .then(source => {
+            //editcode.set(code);
+            var code = document.getElementById("editorcode")
+                ,parent = code.parentElement
+            parent.removeChild(code)
+            code = document.createElement("pre")
+            code.id = "editorcode"
+            code.className = "brush: js"
+            parent.appendChild(code)
+            code.textContent = source
+
+            SyntaxHighlighter.highlight()
+        })
+        .catch(console.error.bind(console));
+}
 
 
 window.addEventListener('load', function () {
-    // Resize by document.documentElement.clientHeight
-/*
-    var i
-      , column = document.querySelectorAll(".tabcontent")
-      , clHeight = document.documentElement.clientHeight;
-    for (i = 0; i < column.length; i++) {
-         column[i].style.height = clHeight;
-    }
-*/
+    // Add New JSON file by template
+    document.getElementById('newDocument').onclick = function () {
+        jsonA.prj  = window.prompt('Enter project name','myproject');
+        jsonA.id = window.prompt('Enter file name','mylogic')
+        editor.setText(JSON.stringify(jsonA));
+        var node = document.createElement("a");                    
+        node.appendChild(document.createTextNode(jsonA.id));
+        node.className = "list-group-item list-group-item-action";
+        node.setAttribute("data-toggle", "list");
+        node.setAttribute("data-json", editor.getText());
+        node.setAttribute("href", "#");
+        node.setAttribute("role", "tab");
+        node.setAttribute("aria-controls", jsonA.id);
+        node.onclick = function () {
+            editor.setText(this.getAttribute("data-json"));
+        }
+        document.getElementById('prj-list-tab').appendChild(node); 
+    };
+
     // Load a JSON document
     FileReaderJS.setupInput(document.getElementById('loadDocument'), {
         readAsDefault: 'Text',
@@ -592,7 +671,7 @@ window.addEventListener('load', function () {
         ]
     };
 
-    editor = new JSONEditor(container, options, jsonA);
+    editor = new JSONEditor(container, options, {});
 
     // Code Syntax Highlight
     //SyntaxHighlighter.all();
