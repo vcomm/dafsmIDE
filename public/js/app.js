@@ -671,7 +671,7 @@ window.addEventListener('load', function () {
         ]
     };
 
-    editor = new JSONEditor(container, options, {});
+    editor = new JSONEditor(container, options, jsonA);
 
     // Code Syntax Highlight
     //SyntaxHighlighter.all();
