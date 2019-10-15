@@ -2,40 +2,51 @@
 
 const es6Patern = (function () {
     
+    let bodyBios = []
+
     function sourceGenerator(logic) {
+        bodyBios = []
         let str = ''
         console.info(`sourceGenerator`)
         try {
-            str += `         ${logic.start.name}: function(cntx) { }\n`+
-                   `        ,${logic.stop.name}: function(cntx) { }\n`
+            str += `         ${logic.start.name}: this.${logic.start.name}\n`+
+                   `        ,${logic.stop.name}: this.${logic.start.name}\n`
+
+            bodyBios.push(`${logic.start.name}(cntx)`)
+            bodyBios.push(`${logic.stop.name}(cntx)`)
 
             if (Array.isArray(logic.states))
                 logic.states.forEach(state => {
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    str += `        ,${trig.name}: function(cntx) { }\n`
+                                    bodyBios.push(`${trig.name}(cntx)`)
+                                    str += `        ,${trig.name}: this.${trig.name}\n`
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    str += `        ,${effect.name}: function(cntx) { }\n`
+                                    bodyBios.push(`${effect.name}(cntx)`)
+                                    str += `        ,${effect.name}: this.${effect.name}\n`
                                 })
                             }
                         })
@@ -46,29 +57,34 @@ const es6Patern = (function () {
                     let state = logic.states[key]
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            str += `        ,${action.name}: function(cntx) { }\n`
+                            bodyBios.push(`${action.name}(cntx)`)
+                            str += `        ,${action.name}: this.${action.name}\n`
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    str += `        ,${trig.name}: function(cntx) { }\n`
+                                    bodyBios.push(`${trig.name}(cntx)`)
+                                    str += `        ,${trig.name}: this.${trig.name}\n`
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    str += `        ,${effect.name}: function(cntx) { }\n`
+                                    bodyBios.push(`${effect.name}(cntx)`)
+                                    str += `        ,${effect.name}: this.${effect.name}\n`
                                 })
                             }
                         })
@@ -80,36 +96,52 @@ const es6Patern = (function () {
             return str;
         }        
     }
+    function funcBody() {
+        let str = `\n/* Declare  < async > for asynchronous functions */\n\n`
+            str += `/* Use follow pattern code for async function body  */\n\n`
+            str += `/* return (new Promise((resolve,reject) => { <your code> resolve(cntx)/reject(error) })).then(data => { <your code> return data; });*/\n\n`
+            str += `/* Trigger/Event declared with < ev_*: > function must be return true or false*/\n\n`
+        bodyBios.forEach(func => {
+            str += `${' '.repeat(5)}${func} {\n`
+            str += `${' '.repeat(10)}return\n`
+            str += `${' '.repeat(5)}}\n`
+        })
+        return str;
+    }
     return {
         code: function (fsm,bside,library) {
             let code = `'use strict'\n\n`
             if (bside) {
-                code += `const Dafsm = require('dafsm').classDafsm\n\n`
+                code += `/* include in package.json in dependencies: */\n`
+                code += `/* "dafsm": "git+https://github.com/vcomm/dafsm-node.git" */\n\n`
+                code += `const wrapper  = require('dafsm').WRAPPER\n`
+                code += `const asyncwrapper  = require('dafsm').ASYNCWRAPPER\n`
             } else {
-                code += `\n // include in html <script src='/scripts/dafsm/lib/cdafsm.js'></script>`;
+                code += `\n // include in html <script src='/scripts/dafsm/src/dafsm.js'></script>`;
             }
-            code += `\n\n let ${library} = { }`
-            code += `\n\n class Wrapper extends Dafsm {`
-            code += `\n\n    constructor(name){`
-            code += `\n       super(name)`
-            code += `\n       this._lib = {\n`
+
+            code += `\n\n class ${library} extends require('dafsm').CONTENT {`
+            code += `\n\n    constructor(){`
+            code += `\n       super('myDataFlow')`
+            code += `\n    }`
+            code += `\n\n    bios() { `
+            code += `\n       return {\n`
             code += sourceGenerator(fsm)
             code += `\n       }`
             code += `\n    }`
-            code += `\n\n    call(fname) { return this._lib[fname] }`
-            code += `\n\n    runStep(cntx) { super.event(cntx) }`
-            code += `\n\n    startLogic(cntx) {`
-            code += `\n       if(cntx.logic && !cntx.complete) {`
-            code += `\n          this.call(cntx.logic.start.name)(cntx)`
-            code += `\n       }`
-            code += `\n    }`
-            code += `\n\n    stopLogic(cntx) {`
-            code += `\n       if(cntx.logic && !cntx.complete) {`
-            code += `\n          this.call(cntx.logic.stop.name)(cntx)`
-            code += `\n       }`
-            code += `\n    }`
-            code += `\n\n }`
+            code += `${funcBody()}\n`
+            code += ` }\n\n`
             
+            code += `const myCntn = new ${library}()\n\n`  
+            code += `const path = '.././json/' /* path to json directory */\n\n`   
+            code += `const engine = new asyncwrapper(path)\n\n`  
+            code += `engine.init(engine.load(engine.read('mainloop.json')), myCntn)\n\n`
+            code += `myCntn.engine(engine)\n\n` 
+            code += `/* If Validation is true , code generation is consistency with algorithm describe in json file */\n\n`           
+            code += `console.debug('Validate: ', engine.validate('mainloop', myCntn))\n\n`
+            code += `/* When EventEmitter Alert determinate actual data will be call */\n\n`
+            code += `if (myCntn.get()['complete'] != true)\n`
+            code += `    myCntn.emit()\n\n`
             return code;
         }
     }

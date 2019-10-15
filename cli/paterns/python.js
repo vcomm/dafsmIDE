@@ -57,16 +57,19 @@ const pyPatern = (function () {
                     let state = logic.states[key]
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
+                            bodyBios.push(`def ${action.name}(self):`)
                             str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
+                            bodyBios.push(`def ${action.name}(self):`)
                             str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
+                            bodyBios.push(`def ${action.name}(self):`)
                             str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
                         })
                     }
@@ -74,11 +77,13 @@ const pyPatern = (function () {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
+                                    bodyBios.push(`def ${trig.name}(self):`)
                                     str += `${' '.repeat(13)}"${trig.name}": self.${trig.name},\n`
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
+                                    bodyBios.push(`def ${effect.name}(self):`)
                                     str += `${' '.repeat(13)}"${effect.name}": self.${effect.name},\n`
                                 })
                             }
@@ -94,7 +99,7 @@ const pyPatern = (function () {
 
     function funcBody() {
         let str = '#Declare < def > for synchronous functions, < async def > for asynchronous\n'
-        str += '#Trigger/Event declared with < dev ev_*: > function must be retrun True or False\n\n'
+        str += '#Trigger/Event declared with < dev ev_*: > function must be return True or False\n\n'
         bodyBios.forEach(func => {
             str += `${' '.repeat(5)}${func}\n`
             str += `${' '.repeat(10)}return\n\n`
@@ -116,14 +121,15 @@ const pyPatern = (function () {
 
             code += `${funcBody()}\n\n`
 
-            code += `\nengine = AsyncWrapper('engine')`
+            code += `\npath = '.././json/' # path to json directory`  
+            code += `\nengine = AsyncWrapper(path)`
             code += `\ndata = engine.init(engine.load(engine.read('mainloop.json')), ${library})`
             code += `\ndata.engine(data, engine)`
-            code += `\nprint('Validate: ', engine.validate('mainloop', data))`
             code += `\n#If Validation is True , code generation is consistency with algorithm describe in json file`
-            code += `\n#When Event Alert after determinate data will be call`
-            code += `\n\n# if data.get(data)["complete"] is not True:`
-            code += `\n#     data = data.emit(data)`
+            code += `\nprint('Validate: ', engine.validate('mainloop', data))`
+            code += `\n#When EventEmitter Alert determinate actual data will be call`
+            code += `\n\n if data.get(data)["complete"] is not True:`
+            code += `\n     data = data.emit(data)`
             code += `\n\n`
             
             return code;
