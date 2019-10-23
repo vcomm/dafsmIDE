@@ -3,9 +3,11 @@
 const pyPatern = (function () {
     
     let bodyBios = []
+    let funcList = {}
 
     function sourceGenerator(logic) {
         bodyBios = []
+        funcList = {}
         let str = ''
         console.info(`sourceGenerator`)
         try {
@@ -19,34 +21,44 @@ const pyPatern = (function () {
                 logic.states.forEach(state => {
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    bodyBios.push(`def ${trig.name}(self):`)
-                                    str += `${' '.repeat(13)}"${trig.name}": self.${trig.name},\n`
+                                    if (checkFuncList(trig.name)) {
+                                        bodyBios.push(`def ${trig.name}(self):`)
+                                        str += `${' '.repeat(13)}"${trig.name}": self.${trig.name},\n`
+                                    }
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    bodyBios.push(`def ${effect.name}(self):`)
-                                    str += `${' '.repeat(13)}"${effect.name}": self.${effect.name},\n`
+                                    if (checkFuncList(effect.name)) {
+                                        bodyBios.push(`def ${effect.name}(self):`)
+                                        str += `${' '.repeat(13)}"${effect.name}": self.${effect.name},\n`
+                                    }
                                 })
                             }
                         })
@@ -57,34 +69,44 @@ const pyPatern = (function () {
                     let state = logic.states[key]
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            bodyBios.push(`def ${action.name}(self):`)
-                            str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`def ${action.name}(self):`)
+                                str += `${' '.repeat(13)}"${action.name}": self.${action.name},\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    bodyBios.push(`def ${trig.name}(self):`)
-                                    str += `${' '.repeat(13)}"${trig.name}": self.${trig.name},\n`
+                                    if (checkFuncList(trig.name)) {
+                                        bodyBios.push(`def ${trig.name}(self):`)
+                                        str += `${' '.repeat(13)}"${trig.name}": self.${trig.name},\n`
+                                    }
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    bodyBios.push(`def ${effect.name}(self):`)
-                                    str += `${' '.repeat(13)}"${effect.name}": self.${effect.name},\n`
+                                    if (checkFuncList(effect.name)) {
+                                        bodyBios.push(`def ${effect.name}(self):`)
+                                        str += `${' '.repeat(13)}"${effect.name}": self.${effect.name},\n`
+                                    }
                                 })
                             }
                         })
@@ -105,6 +127,15 @@ const pyPatern = (function () {
             str += `${' '.repeat(10)}return\n\n`
         })
         return str;
+    }
+
+    function checkFuncList(fname) {
+        if (funcList.hasOwnProperty(fname)) 
+            return false
+        else {
+            funcList[fname] = true
+            return true
+        }
     }
     return {
         code: function (fsm,bside,library) {

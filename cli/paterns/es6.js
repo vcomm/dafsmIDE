@@ -3,14 +3,16 @@
 const es6Patern = (function () {
     
     let bodyBios = []
+    let funcList = {}
 
     function sourceGenerator(logic) {
         bodyBios = []
+        funcList = {}
         let str = ''
         console.info(`sourceGenerator`)
         try {
             str += `         ${logic.start.name}: this.${logic.start.name}\n`+
-                   `        ,${logic.stop.name}: this.${logic.start.name}\n`
+                   `        ,${logic.stop.name}: this.${logic.stop.name}\n`
 
             bodyBios.push(`${logic.start.name}(cntx)`)
             bodyBios.push(`${logic.stop.name}(cntx)`)
@@ -19,34 +21,44 @@ const es6Patern = (function () {
                 logic.states.forEach(state => {
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    bodyBios.push(`${trig.name}(cntx)`)
-                                    str += `        ,${trig.name}: this.${trig.name}\n`
+                                    if (checkFuncList(trig.name)) {
+                                        bodyBios.push(`${trig.name}(cntx)`)
+                                        str += `        ,${trig.name}: this.${trig.name}\n`
+                                    }
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    bodyBios.push(`${effect.name}(cntx)`)
-                                    str += `        ,${effect.name}: this.${effect.name}\n`
+                                    if (checkFuncList(effect.name)) {
+                                        bodyBios.push(`${effect.name}(cntx)`)
+                                        str += `        ,${effect.name}: this.${effect.name}\n`
+                                    }
                                 })
                             }
                         })
@@ -57,34 +69,44 @@ const es6Patern = (function () {
                     let state = logic.states[key]
                     if (state.hasOwnProperty("exits")) {
                         state.exits.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("stays")) {
                         state.stays.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("entries")) {
                         state.entries.forEach(action => {
-                            bodyBios.push(`${action.name}(cntx)`)
-                            str += `        ,${action.name}: this.${action.name}\n`
+                            if (checkFuncList(action.name)) {
+                                bodyBios.push(`${action.name}(cntx)`)
+                                str += `        ,${action.name}: this.${action.name}\n`
+                            }
                         })
                     }
                     if (state.hasOwnProperty("transitions")) {
                         state.transitions.forEach(trans => {
                             if (trans.hasOwnProperty("triggers")) {
                                 trans.triggers.forEach(trig => {
-                                    bodyBios.push(`${trig.name}(cntx)`)
-                                    str += `        ,${trig.name}: this.${trig.name}\n`
+                                    if (checkFuncList(trig.name)) {
+                                        bodyBios.push(`${trig.name}(cntx)`)
+                                        str += `        ,${trig.name}: this.${trig.name}\n`
+                                    }
                                 })
                             }
                             if (trans.hasOwnProperty("effects")) {
                                 trans.effects.forEach(effect => {
-                                    bodyBios.push(`${effect.name}(cntx)`)
-                                    str += `        ,${effect.name}: this.${effect.name}\n`
+                                    if (checkFuncList(effect.name)) {
+                                        bodyBios.push(`${effect.name}(cntx)`)
+                                        str += `        ,${effect.name}: this.${effect.name}\n`
+                                    }
                                 })
                             }
                         })
@@ -107,6 +129,14 @@ const es6Patern = (function () {
             str += `${' '.repeat(5)}}\n`
         })
         return str;
+    }
+    function checkFuncList(fname) {
+        if (funcList.hasOwnProperty(fname)) 
+            return false
+        else {
+            funcList[fname] = true
+            return true
+        }
     }
     return {
         code: function (fsm,bside,library) {
