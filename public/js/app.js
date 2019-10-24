@@ -671,7 +671,132 @@ window.addEventListener('load', function () {
         ]
     };
 
-    editor = new JSONEditor(container, options, jsonA);
+    var treeLoop = {
+        "id": "loopdetect",
+        "type": "FSM",
+        "prj": "tree_",
+        "complete": false,
+        "start": {
+          "name": "fn_initializeTree"
+        },
+        "stop": {
+          "name": "fn_destroyTree"
+        },
+        "countstates": 5,
+        "states": [
+          {
+            "key": "init",
+            "name": "InitialState",
+            "transitions": [
+              {
+                "nextstatename": "shift",
+                "triggers": [
+                  {
+                    "name": "ev_IsTree"
+                  }
+                ],
+                "effects": [
+                  {
+                    "name": "fn_setFastSlowIsRoot"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "shift",
+            "name": "shiftPointers",
+            "entries": [
+              {
+                "name": "fn_shiftFastNode"
+              },
+              {
+                "name": "fn_shiftSlowNode"
+              }
+            ],
+            "exits": [
+              {
+                "name": "fn_keepShiftStatistics"
+              }
+            ],
+            "transitions": [
+              {
+                "nextstatename": "next",
+                "triggers": [
+                  {
+                    "name": "ev_FastSlowIsDiffNode"
+                  }
+                ],
+                "effects": [
+                  {
+                    "name": "fn_MarkCheckedNodes"
+                  }
+                ]
+              },
+              {
+                "nextstatename": "loop",
+                "triggers": [
+                  {
+                    "name": "ev_FastSlowIsSameNode"
+                  }
+                ],
+                "effects": [
+                  {
+                    "name": "fn_prepareError"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "next",
+            "name": "contunueWalk",
+            "transitions": [
+              {
+                "nextstatename": "final",
+                "triggers": [
+                  {
+                    "name": "ev_treeCompleteFinish"
+                  }
+                ],
+                "effects": [
+                  {
+                    "name": "fn_prepareStatistics"
+                  }
+                ]
+              },
+              {
+                "nextstatename": "shift",
+                "triggers": [
+                  {
+                    "name": "ev_treeIsNoComplete"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "loop",
+            "name": "loopDetect",
+            "entries": [
+              {
+                "name": "fn_errorReport"
+              }
+            ]
+          },
+          {
+            "key": "final",
+            "name": "normalExit",
+            "entries": [
+              {
+                "name": "fn_treeReport"
+              }
+            ]
+          }
+        ]
+      };
+
+    editor = new JSONEditor(container, options, treeLoop);
 
     // Code Syntax Highlight
     //SyntaxHighlighter.all();
